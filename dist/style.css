@@ -17,7 +17,7 @@ body {
   --color1: #dbd8e3;
   --color2: #5c5470;
   --color3: #352f44;
-  --text-color: #2a2438;
+  --text-color: azure;
 }
 body {
   min-height: 100vh;
@@ -26,18 +26,26 @@ body {
 }
 
 header {
+  padding: 20px;
   display: grid;
-  grid-template-columns: 5% auto;
+  grid-template-columns: auto auto 1fr;
   justify-items: flex-start;
   align-items: center;
-  background-color: var(--color1);
-  color: var(--text-color);
-  padding: 5px;
+  background-color: var(--color2);
+  color: var(--color3);
+  padding: 15px;
+  gap: 5px;
+  height: 90px;
+}
+
+header p {
+  font-size: x-large;
+  font-weight: 900;
+  align-self: center;
 }
 
 footer {
-  background-color: var(--color1);
-  width: auto;
+  background-color: var(--color2);
   padding: 1rem;
 
   color: var(--text-color);
@@ -45,9 +53,84 @@ footer {
   justify-content: center;
   text-decoration: none;
   text-decoration-style: none;
-  margin-top: 85vh;
+  width: 100%;
+  height: 80px;
 }
 footer a {
   text-decoration: none;
   color: inherit;
+}
+.home {
+  min-height: calc(100vh - 340px);
+}
+
+.sideBar {
+  padding: 40px 30px;
+  height: 100%;
+  width: 15%;
+  background-color: var(--color1);
+  display: block;
+}
+
+.row {
+  height: 60px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  justify-items: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--color3);
+  border-radius: 5px;
+  font-weight: 600;
+  padding: 5px;
+}
+.row img:first-of-type {
+  width: 40px;
+}
+.row:hover {
+  background-color: #c1bad2;
+}
+.delete {
+  visibility: hidden;
+}
+.row:hover .delete {
+  visibility: visible;
+}
+.row:last-of-type {
+  height: 80px;
+}
+.row p {
+  justify-self: flex-start;
+}
+
+.preview {
+  width: 80%;
+  background-color: var(--color1);
+}
+
+.hidden {
+  display: none;
+}
+
+.new-project {
+  width: 100%;
+  padding: 5px;
+}
+
+.new-project input {
+  width: 100%;
+}
+
+.new-project button {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  color: beige;
+}
+
+.new-project button:first-of-type {
+  background-color: brown;
+}
+.new-project button:last-of-type {
+  background-color: cornflowerblue;
 }
