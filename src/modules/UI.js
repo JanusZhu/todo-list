@@ -33,8 +33,7 @@ export default class UI {
   static loadSideBar() {
     const sideBar = document.createElement("div");
     sideBar.classList.add("sideBar");
-    const projects = Storage.getProjects().split(",");
-
+    const projects = Storage.getProjects();
     for (let i = 0; i < projects.length; i++) {
       const row = document.createElement("div");
       row.classList.add("row");
@@ -50,7 +49,6 @@ export default class UI {
       deleteBtn.addEventListener("click", () => {
         this.handleDelete(i);
       });
-      console.log(projects[i]);
 
       row.append(icon, text, deleteBtn);
       sideBar.append(row);
@@ -103,7 +101,6 @@ export default class UI {
     if (input.value === "") {
       alert("Please add a name");
     } else {
-      console.log(input.value);
       Storage.addProject(input.value);
       this.handleCancel();
       this.loadContent();
