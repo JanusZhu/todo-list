@@ -1,5 +1,6 @@
 import Project from "./Project";
 import Storage from "./Storage";
+import Task from "./Task";
 
 export default class UI {
   static loadHeader() {
@@ -54,6 +55,9 @@ export default class UI {
       ) {
         const row = document.createElement("div");
         row.classList.add("project");
+        row.addEventListener("click", () => {
+          this.loadProjectDetails(projectName);
+        });
         const icon = document.createElement("img");
         icon.src = "https://img.icons8.com/cotton/64/000000/bulleted-list.png";
 
@@ -76,7 +80,7 @@ export default class UI {
 
   static loadAddSection() {
     const row = document.createElement("div");
-    row.classList.add("add-section");
+    row.classList.add("add-project");
     const addIcon = document.createElement("img");
     addIcon.src = "https://img.icons8.com/ios-glyphs/30/000000/plus-math.png";
     const text = document.createElement("p");
@@ -87,12 +91,92 @@ export default class UI {
     });
     return row;
   }
+  static loadProjectDetails(name) {
+    const preview = document.querySelector(".preview");
+    preview.innerHTML = `<div class = "project-title">${name}</div>`;
+
+    this.loadTasks(name);
+    preview.append(this.loadAddTask());
+  }
+
+  static loadTasks(name) {
+    const taskSection = document.createElement("div");
+    taskSection.classList.add("task-section");
+    document.querySelector(".preview").append(taskSection);
+    Storage.getTodoList()
+      .getProject(name)
+      .getTasks()
+      .forEach((task) => this.loadTask(task));
+  }
+  static loadTask(task) {
+    const taskSection = document.querySelector(".task-section");
+    taskSection.innerHTML += `<div class="task-detail"><img src="https://img.icons8.com/ios/50/000000/task-completed.png"/ class="task-complete"> <div class="task-name">${task.getName()}</div><div class="task-dueDate">${task.getDueDate()}</div><img src="https://img.icons8.com/ios-glyphs/30/000000/multiply.png"/ class="task-delete"></div>`;
+  }
+  static loadAddTask() {
+    const row = document.createElement("div");
+    row.classList.add("add-task");
+    const addIcon = document.createElement("img");
+    addIcon.src = "https://img.icons8.com/ios-glyphs/30/000000/plus-math.png";
+    const text = document.createElement("p");
+    text.textContent = "Add A New Task";
+    row.append(addIcon, text);
+    row.addEventListener("click", () => {
+      this.loadAddTaskBtn(row);
+    });
+    return row;
+  }
+  static loadAddTaskBtn(e) {
+    e.classList.add("hidden");
+    const row = document.createElement("div");
+    row.classList.add("new-task");
+    const input = document.createElement("input");
+    input.id = "task-name";
+    input.type = "text";
+    input.placeholder = "Name";
+    input.maxLength = 8;
+    const addBtn = document.createElement("button");
+    addBtn.classList.add("add");
+    addBtn.textContent = "Add";
+    addBtn.addEventListener("click", () => {
+      this.handleAddTask();
+    });
+    const cancelBtn = document.createElement("button");
+    cancelBtn.classList.add("cancel");
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.addEventListener("click", () => {
+      this.handleCancel();
+    });
+    row.append(input, addBtn, cancelBtn);
+    const preview = document.querySelector(".preview");
+    preview.appendChild(row);
+  }
+
+  static handleAddTask() {
+    const input = document.querySelector("#task-name");
+    const projectName = document.querySelector(".project-title").textContent;
+    if (input.value === "") {
+      alert("Please add a name");
+    } else {
+      Storage.addTask(projectName, new Task(input.value));
+      this.handleCancelTask();
+      this.loadContent();
+    }
+  }
+
+  static handleCancelTask() {
+    document.querySelector(".new-task").remove();
+    if (document.querySelector(".hidden")) {
+      const row = document.querySelector(".hidden");
+      row.classList.remove("hidden");
+    }
+  }
 
   static loadProjectBtn(e) {
     e.classList.add("hidden");
     const row = document.createElement("div");
     row.classList.add("new-project");
     const input = document.createElement("input");
+    input.id = "project-name";
     input.type = "text";
     input.placeholder = "Name";
     input.maxLength = 8;

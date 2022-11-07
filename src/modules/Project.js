@@ -18,6 +18,7 @@ export default class Project {
   setTasks(tasks) {
     this.tasks = tasks;
   }
+
   getTask(taskName) {
     return this.tasks.find((task) => task.getName() === taskName);
   }
