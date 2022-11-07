@@ -15,7 +15,7 @@ export default class Project {
     this.tasks.push(task);
   }
 
-  setTasks() {
+  setTasks(tasks) {
     this.tasks = tasks;
   }
   getTask(taskName) {

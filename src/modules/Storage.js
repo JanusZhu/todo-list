@@ -3,14 +3,14 @@ import Project from "./Project";
 import Task from "./Task";
 
 class Storage {
-  static saveTodoLIst(data) {
-    localStorage.setItem("projects", data);
+  static saveTodoList(data) {
+    localStorage.setItem("todoList", JSON.stringify(data));
   }
 
-  static getProjects() {
+  static getTodoList() {
     const todoList = Object.assign(
       new TodoList(),
-      JSON.parse(localStorage.getItem("projects"))
+      JSON.parse(localStorage.getItem("todoList"))
     );
     todoList.setProjects(
       todoList
@@ -29,28 +29,28 @@ class Storage {
     return todoList;
   }
 
-  static addProject(projectName) {
-    const todoList = this.getProjects();
-    todoList.addProject(projectName);
-    this.saveTodoLIst(todoList);
+  static addProject(project) {
+    const todoList = this.getTodoList();
+    todoList.addProject(project);
+    this.saveTodoList(todoList);
   }
 
   static deleteProject(projectName) {
-    const todoList = this.getProjects();
+    const todoList = this.getTodoList();
     todoList.deleteProject(projectName);
-    this.saveTodoLIst(todoList);
+    this.saveTodoList(todoList);
   }
 
-  static addTask(projectName, taskName) {
-    const todoList = this.getProjects();
-    todoList.getProject(projectName).addTask(taskName);
-    this.saveTodoLIst(todoList);
+  static addTask(projectName, task) {
+    const todoList = this.getTodoList();
+    todoList.getProject(projectName).addTask(task);
+    this.saveTodoList(todoList);
   }
 
   static deleteTask(projectName, taskName) {
-    const todoList = this.getProjects();
+    const todoList = this.getTodoList();
     todoList.getProject(projectName).deleteTask(taskName);
-    this.saveTodoLIst(todoList);
+    this.saveTodoList(todoList);
   }
 }
 

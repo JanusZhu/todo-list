@@ -36,6 +36,6 @@ export default class TodoList {
     const deletedProject = this.projects.find(
       (project) => project.getName() === projectName
     );
-    this.projects.splice(projects.indexOf(deletedProject), 1);
+    this.projects.splice(this.projects.indexOf(deletedProject), 1);
   }
 }

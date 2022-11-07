@@ -1,3 +1,4 @@
+import Project from "./Project";
 import Storage from "./Storage";
 
 export default class UI {
@@ -33,34 +34,49 @@ export default class UI {
   static loadSideBar() {
     const sideBar = document.createElement("div");
     sideBar.classList.add("sideBar");
-    const projects = Storage.getProjects();
-    for (let i = 0; i < projects.length; i++) {
-      const row = document.createElement("div");
-      row.classList.add("row");
-      const icon = document.createElement("img");
-      icon.src = "https://img.icons8.com/cotton/64/000000/bulleted-list.png";
 
-      const text = document.createElement("p");
-      text.textContent = projects[i];
-      const deleteBtn = document.createElement("img");
-      deleteBtn.classList.add("delete");
-      deleteBtn.src =
-        "https://img.icons8.com/sf-ultralight/25/000000/delete-forever.png";
-      deleteBtn.addEventListener("click", () => {
-        this.handleDelete(i);
-      });
-
-      row.append(icon, text, deleteBtn);
-      sideBar.append(row);
-    }
-    sideBar.append(this.loadAddSection());
+    sideBar.append(this.loadProjects(), this.loadAddSection());
 
     return sideBar;
   }
 
+  static loadProjects() {
+    const projectSection = document.createElement("div");
+    const todoList = Storage.getTodoList();
+    console.log(todoList.getProjects().length);
+    for (let i = 0; i < todoList.getProjects().length; i++) {
+      const projectName = todoList.getProjects()[i].getName();
+      console.log(projectName);
+      if (
+        projectName != "Today" &&
+        projectName != "Inbox" &&
+        projectName != "This week"
+      ) {
+        const row = document.createElement("div");
+        row.classList.add("project");
+        const icon = document.createElement("img");
+        icon.src = "https://img.icons8.com/cotton/64/000000/bulleted-list.png";
+
+        const text = document.createElement("p");
+        text.textContent = projectName;
+        const deleteBtn = document.createElement("img");
+        deleteBtn.classList.add("delete");
+        deleteBtn.src =
+          "https://img.icons8.com/sf-ultralight/25/000000/delete-forever.png";
+        deleteBtn.addEventListener("click", () => {
+          this.handleDelete(projectName);
+        });
+
+        row.append(icon, text, deleteBtn);
+        projectSection.append(row);
+      }
+    }
+    return projectSection;
+  }
+
   static loadAddSection() {
     const row = document.createElement("div");
-    row.classList.add("row");
+    row.classList.add("add-section");
     const addIcon = document.createElement("img");
     addIcon.src = "https://img.icons8.com/ios-glyphs/30/000000/plus-math.png";
     const text = document.createElement("p");
@@ -79,7 +95,7 @@ export default class UI {
     const input = document.createElement("input");
     input.type = "text";
     input.placeholder = "Name";
-    input.maxLength = 10;
+    input.maxLength = 8;
     const addBtn = document.createElement("button");
     addBtn.classList.add("add");
     addBtn.textContent = "Add";
@@ -101,12 +117,13 @@ export default class UI {
     if (input.value === "") {
       alert("Please add a name");
     } else {
-      Storage.addProject(input.value);
+      Storage.addProject(new Project(input.value));
       this.handleCancel();
       this.loadContent();
     }
   }
   static handleDelete(i) {
+    console.log(i);
     Storage.deleteProject(i);
     this.loadContent();
   }
@@ -126,13 +143,6 @@ export default class UI {
 
   static loadContent() {
     const content = document.querySelector("#content");
-    content.innerHTML = "";
-    content.append(this.loadHeader(), this.loadHome(), this.loadFooter());
-  }
-
-  static initializeContent() {
-    const content = document.querySelector("#content");
-    Storage.setDefaultProjects();
     content.innerHTML = "";
     content.append(this.loadHeader(), this.loadHome(), this.loadFooter());
   }

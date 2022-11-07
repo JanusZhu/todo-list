@@ -1,2 +1,2 @@
 import UI from "./modules/UI";
-document.addEventListener("DOMContentLoaded", UI.initializeContent());
+document.addEventListener("DOMContentLoaded", UI.loadContent());
