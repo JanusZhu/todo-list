@@ -61,19 +61,20 @@ footer a {
   color: inherit;
 }
 .home {
-  min-height: calc(100vh - 340px);
+  min-height: calc(100vh - 140px);
+  display: flex;
 }
 
 .sideBar {
   padding: 40px 30px;
-  height: 100%;
-  width: 15%;
+  min-height: 100%;
+  max-width: 300px;
   background-color: var(--color1);
   display: block;
 }
 
 .project,
-.add-section {
+.add-project {
   width: 100%;
   height: 60px;
   display: grid;
@@ -87,11 +88,11 @@ footer a {
   padding: 5px;
 }
 .project img,
-.add-section:first-of-type {
+.add-project:first-of-type {
   width: 40px;
 }
 .project:hover,
-.add-section:hover {
+.add-project:hover {
   background-color: #c1bad2;
 }
 .delete {
@@ -100,17 +101,24 @@ footer a {
 .project:hover .delete {
   visibility: visible;
 }
-.add-section {
+.add-project {
   height: 80px;
 }
 .project p,
-.add-section {
+.add-project {
   justify-self: flex-start;
 }
 
 .preview {
+  padding: 5%;
   width: 80%;
-  background-color: var(--color1);
+  display: flex;
+  flex-direction: column;
+}
+
+.project-title {
+  font-size: larger;
+  font-weight: 600;
 }
 
 .hidden {
