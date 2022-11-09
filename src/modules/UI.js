@@ -3,7 +3,16 @@ import Storage from "./Storage";
 import Task from "./Task";
 
 export default class UI {
+  static loadContent() {
+    const content = document.querySelector("#content");
+    content.innerHTML = "";
+    this.loadHeader();
+    this.loadHome();
+    this.loadFooter();
+  }
+
   static loadHeader() {
+    const content = document.querySelector("#content");
     const header = document.createElement("header");
 
     const headerImg = document.createElement("img");
@@ -11,37 +20,39 @@ export default class UI {
     const headerTxt = document.createElement("p");
     headerTxt.textContent = "Todoism";
     header.append(headerImg, headerTxt);
-    return header;
+    content.append(header);
   }
   static loadFooter() {
+    const content = document.querySelector("#content");
     const footer = document.createElement("footer");
     footer.textContent = "Copyrights© JanusZhu |";
     const link = document.createElement("a");
     link.href = "#";
     link.textContent = "Source Code";
     footer.appendChild(link);
-    const content = document.getElementById("content");
-    content.after(footer);
-    return footer;
+    content.append(footer);
   }
 
   static loadHome() {
+    const content = document.querySelector("#content");
     const home = document.createElement("div");
     home.classList.add("home");
-    home.append(this.loadSideBar(), this.loadProjectPreview());
-    return home;
+    content.append(home);
+    this.loadSideBar();
+    this.loadProjectPreview();
   }
 
   static loadSideBar() {
+    const home = document.querySelector(".home");
     const sideBar = document.createElement("div");
     sideBar.classList.add("sideBar");
-
-    sideBar.append(this.loadProjects(), this.loadAddSection());
-
-    return sideBar;
+    home.append(sideBar);
+    this.loadProjects();
   }
 
   static loadProjects() {
+    const sideBar = document.querySelector(".sideBar");
+    sideBar.innerHTML = "";
     const projectSection = document.createElement("div");
     const todoList = Storage.getTodoList();
     console.log(todoList.getProjects().length);
@@ -75,7 +86,7 @@ export default class UI {
         projectSection.append(row);
       }
     }
-    return projectSection;
+    sideBar.append(projectSection, this.loadAddSection());
   }
 
   static loadAddSection() {
@@ -96,9 +107,33 @@ export default class UI {
     preview.innerHTML = `<div class = "project-title">${name}</div>`;
 
     this.loadTasks(name);
-    preview.append(this.loadAddTask());
+    this.loadAddTask();
+    this.loadCompleteBtn();
+    this.loadDeleteBtn();
   }
-
+  static loadDeleteBtn() {
+    const btns = Array.from(document.querySelectorAll(".task-complete"));
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const name = btn.getAttribute("data-for-task");
+        const task = document.querySelector(`[data-info-task = ${name}]`);
+        task.classList.toggle("completed");
+      });
+    });
+  }
+  static loadCompleteBtn() {
+    const btns = Array.from(document.querySelectorAll(".task-delete"));
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const taskName = btn.getAttribute("data-for-task");
+        const projectName =
+          document.querySelector(".project-title").textContent;
+        Storage.deleteTask(projectName, taskName);
+        this.loadProjectDetails(projectName);
+        console.log("yes");
+      });
+    });
+  }
   static loadTasks(name) {
     const taskSection = document.createElement("div");
     taskSection.classList.add("task-section");
@@ -110,7 +145,7 @@ export default class UI {
   }
   static loadTask(task) {
     const taskSection = document.querySelector(".task-section");
-    taskSection.innerHTML += `<div class="task-detail"><img src="https://img.icons8.com/ios/50/000000/task-completed.png"/ class="task-complete"> <div class="task-name">${task.getName()}</div><div class="task-dueDate">${task.getDueDate()}</div><img src="https://img.icons8.com/ios-glyphs/30/000000/multiply.png"/ class="task-delete"></div>`;
+    taskSection.innerHTML += `<div class="task-detail"><img src = "https://img.icons8.com/ios/50/000000/task-completed.png" class= "task-complete" data-for-task = "${task.getName()}"><div class="task-name" data-info-task = "${task.getName()}">${task.getName()}</div> <div class="task-dueDate">${task.getDueDate()}</div><img src="https://img.icons8.com/ios-glyphs/30/000000/multiply.png"/ class="task-delete" data-for-task = "${task.getName()}"></div>`;
   }
   static loadAddTask() {
     const row = document.createElement("div");
@@ -123,7 +158,8 @@ export default class UI {
     row.addEventListener("click", () => {
       this.loadAddTaskBtn(row);
     });
-    return row;
+    const preview = document.querySelector(".preview");
+    preview.append(row);
   }
   static loadAddTaskBtn(e) {
     e.classList.add("hidden");
@@ -144,7 +180,7 @@ export default class UI {
     cancelBtn.classList.add("cancel");
     cancelBtn.textContent = "Cancel";
     cancelBtn.addEventListener("click", () => {
-      this.handleCancel();
+      this.handleCancelTask();
     });
     row.append(input, addBtn, cancelBtn);
     const preview = document.querySelector(".preview");
@@ -159,7 +195,7 @@ export default class UI {
     } else {
       Storage.addTask(projectName, new Task(input.value));
       this.handleCancelTask();
-      this.loadContent();
+      this.loadProjectDetails(projectName);
     }
   }
 
@@ -203,7 +239,7 @@ export default class UI {
     } else {
       Storage.addProject(new Project(input.value));
       this.handleCancel();
-      this.loadContent();
+      this.loadProjects();
     }
   }
   static handleDelete(i) {
@@ -220,14 +256,9 @@ export default class UI {
   }
 
   static loadProjectPreview() {
+    const home = document.querySelector(".home");
     const preview = document.createElement("div");
     preview.classList.add("preview");
-    return preview;
-  }
-
-  static loadContent() {
-    const content = document.querySelector("#content");
-    content.innerHTML = "";
-    content.append(this.loadHeader(), this.loadHome(), this.loadFooter());
+    home.append(preview);
   }
 }

@@ -68,6 +68,7 @@ footer a {
 .sideBar {
   padding: 40px 30px;
   min-height: 100%;
+  min-width: 300px;
   max-width: 300px;
   background-color: var(--color1);
   display: block;
@@ -92,7 +93,8 @@ footer a {
   width: 40px;
 }
 .project:hover,
-.add-project:hover {
+.add-project:hover,
+.project:focus {
   background-color: #c1bad2;
 }
 .delete {
@@ -107,18 +109,6 @@ footer a {
 .project p,
 .add-project {
   justify-self: flex-start;
-}
-
-.preview {
-  padding: 5%;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-}
-
-.project-title {
-  font-size: larger;
-  font-weight: 600;
 }
 
 .hidden {
@@ -146,4 +136,58 @@ footer a {
 }
 .new-project button:last-of-type {
   background-color: cornflowerblue;
+}
+
+.preview {
+  background-color: #dbd8e384;
+  padding: 5%;
+  width: calc(100vw - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+.project-title {
+  margin-bottom: 10px;
+  margin-left: 5px;
+  font-size: larger;
+  font-weight: 600;
+}
+
+.task-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.task-detail {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 20px;
+}
+.add-task {
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+}
+.new-task button {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  color: beige;
+}
+.new-task button:first-of-type {
+  background-color: brown;
+}
+.new-task button:last-of-type {
+  background-color: cornflowerblue;
+}
+
+.task-complete:hover,
+.task-delete:hover {
+  transform: scale(1.2);
+}
+
+.completed {
+  text-decoration: line-through;
 }
