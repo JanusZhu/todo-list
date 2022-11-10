@@ -111,10 +111,6 @@ footer a {
   justify-self: flex-start;
 }
 
-.hidden {
-  display: none;
-}
-
 .new-project {
   width: 100%;
   padding: 5px;
@@ -190,4 +186,29 @@ footer a {
 
 .completed {
   text-decoration: line-through;
+}
+.change-name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.change-name input {
+  height: 30px;
+  width: 100px;
+}
+
+.change-name button {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  color: beige;
+}
+.change-name button:first-of-type {
+  background-color: green;
+}
+.change-name button:last-of-type {
+  background-color: cornflowerblue;
+}
+.hidden {
+  display: none;
 }
