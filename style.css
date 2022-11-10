@@ -94,13 +94,15 @@ footer a {
 }
 .project:hover,
 .add-project:hover,
-.project:focus {
+.project.focus,
+.task-detail:hover {
   background-color: #c1bad2;
 }
 .delete {
   visibility: hidden;
 }
-.project:hover .delete {
+.project:hover .delete,
+.task-detail:hover .delete {
   visibility: visible;
 }
 .add-project {
@@ -181,7 +183,7 @@ footer a {
 
 .task-complete:hover,
 .task-delete:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 .completed {
