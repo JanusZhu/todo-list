@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import Project from "./Project";
 import Storage from "./Storage";
 import Task from "./Task";
@@ -67,6 +68,10 @@ export default class UI {
         const row = document.createElement("div");
         row.classList.add("project");
         row.addEventListener("click", () => {
+          if (document.querySelector(".focus")) {
+            document.querySelector(".focus").classList.remove("focus");
+          }
+          row.classList.add("focus");
           this.loadProjectDetails(projectName);
         });
         const icon = document.createElement("img");
@@ -111,11 +116,35 @@ export default class UI {
     this.loadCompleteBtn();
     this.loadDeleteBtn();
     this.loadNameBtn();
+    this.loadDateBtn();
+  }
+
+  static replaceDate(btn) {
+    const taskName = btn.getAttribute("data-for-task");
+    const div = document.createElement("div");
+    div.innerHTML = `<div class="change-date"><input type="date" id="new-date"></div>`;
+    btn.insertAdjacentElement("afterend", div);
+    const input = document.querySelector("#new-date");
+    input.addEventListener("change", () => {
+      const newDueDate = format(new Date(input.value), "MM/dd/yyyy");
+      const projectName = document.querySelector(".project-title").textContent;
+      Storage.changeTaskDate(projectName, taskName, newDueDate);
+      this.loadProjectDetails(projectName);
+    });
+  }
+  static loadDateBtn() {
+    const btns = Array.from(document.querySelectorAll(".task-dueDate"));
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btn.classList.add("hidden");
+        this.replaceDate(btn);
+      });
+    });
   }
   static replaceName(btn) {
     const div = document.createElement("div");
     const taskName = btn.textContent;
-    div.innerHTML = `<div class="change-name"><input type="text" id="new-name" value=${btn.textContent} maxlength="8"> <button class="update"> Update </button> <button class="cancel"> Cancel </button></div>`;
+    div.innerHTML = `<div class="change-name"><input type="text" id="new-name" value=${btn.textContent} maxlength="20"> <button class="update"> Update </button> <button class="cancel"> Cancel </button></div>`;
     btn.insertAdjacentElement("afterend", div);
     const update = document.querySelector(".update");
     update.addEventListener("click", () => {
@@ -170,7 +199,7 @@ export default class UI {
   }
   static loadTask(task) {
     const taskSection = document.querySelector(".task-section");
-    taskSection.innerHTML += `<div class="task-detail"><img src = "https://img.icons8.com/ios/50/000000/task-completed.png" class= "task-complete" data-for-task = "${task.getName()}"><div class="task-name" data-info-task = "${task.getName()}">${task.getName()}</div> <div class="task-dueDate">${task.getDueDate()}</div><img src="https://img.icons8.com/ios-glyphs/30/000000/multiply.png"/ class="task-delete" data-for-task = "${task.getName()}"></div>`;
+    taskSection.innerHTML += `<div class="task-detail"><img src = "https://img.icons8.com/ios/50/000000/task-completed.png" class= "task-complete" data-for-task = "${task.getName()}"><div class="task-name" data-info-task = "${task.getName()}">${task.getName()}</div> <div class="task-dueDate" data-for-task = "${task.getName()}">${task.getDueDate()}</div><img src="https://img.icons8.com/ios-glyphs/30/000000/multiply.png"/ class="task-delete delete" data-for-task = "${task.getName()}"></div>`;
   }
   static loadAddTask() {
     const row = document.createElement("div");
@@ -195,7 +224,7 @@ export default class UI {
     input.id = "task-name";
     input.type = "text";
     input.placeholder = "Name";
-    input.maxLength = 8;
+    input.maxLength = 20;
     const addBtn = document.createElement("button");
     addBtn.classList.add("add");
     addBtn.textContent = "Add";
@@ -241,7 +270,7 @@ export default class UI {
     input.id = "project-name";
     input.type = "text";
     input.placeholder = "Name";
-    input.maxLength = 8;
+    input.maxLength = 20;
     const addBtn = document.createElement("button");
     addBtn.classList.add("add");
     addBtn.textContent = "Add";
@@ -262,6 +291,10 @@ export default class UI {
     const input = document.querySelector("input");
     if (input.value === "") {
       alert("Please add a name");
+      retun;
+    } else if (Storage.getTodoList().contains(input.value)) {
+      alert("Please choose a different name");
+      return;
     } else {
       Storage.addProject(new Project(input.value));
       this.handleCancel();

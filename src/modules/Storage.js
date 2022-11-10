@@ -58,6 +58,11 @@ class Storage {
     todoList.getProject(projectName).getTask(taskName).setName(newTaskName);
     this.saveTodoList(todoList);
   }
+  static changeTaskDate(projectName, taskName, newTaskDate) {
+    const todoList = this.getTodoList();
+    todoList.getProject(projectName).getTask(taskName).setDueDate(newTaskDate);
+    this.saveTodoList(todoList);
+  }
 }
 
 export default Storage;

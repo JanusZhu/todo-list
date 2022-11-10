@@ -16,4 +16,7 @@ export default class Task {
   getDueDate() {
     return this.dueDate;
   }
+  setDueDate(newDueDate) {
+    this.dueDate = newDueDate;
+  }
 }
