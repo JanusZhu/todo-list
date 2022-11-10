@@ -52,6 +52,12 @@ class Storage {
     todoList.getProject(projectName).deleteTask(taskName);
     this.saveTodoList(todoList);
   }
+
+  static changeTaskName(projectName, taskName, newTaskName) {
+    const todoList = this.getTodoList();
+    todoList.getProject(projectName).getTask(taskName).setName(newTaskName);
+    this.saveTodoList(todoList);
+  }
 }
 
 export default Storage;

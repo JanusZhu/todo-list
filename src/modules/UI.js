@@ -110,6 +110,31 @@ export default class UI {
     this.loadAddTask();
     this.loadCompleteBtn();
     this.loadDeleteBtn();
+    this.loadNameBtn();
+  }
+  static replaceName(btn) {
+    const div = document.createElement("div");
+    const taskName = btn.textContent;
+    div.innerHTML = `<div class="change-name"><input type="text" id="new-name" value=${btn.textContent} maxlength="8"> <button class="update"> Update </button> <button class="cancel"> Cancel </button></div>`;
+    btn.insertAdjacentElement("afterend", div);
+    const update = document.querySelector(".update");
+    update.addEventListener("click", () => {
+      const newName = document.querySelector("#new-name").value;
+      console.log(newName);
+      const projectName = document.querySelector(".project-title").textContent;
+      Storage.changeTaskName(projectName, taskName, newName);
+      this.loadProjectDetails(projectName);
+    });
+  }
+
+  static loadNameBtn() {
+    const btns = Array.from(document.querySelectorAll(".task-name"));
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btn.classList.add("hidden");
+        this.replaceName(btn);
+      });
+    });
   }
   static loadDeleteBtn() {
     const btns = Array.from(document.querySelectorAll(".task-complete"));
@@ -155,13 +180,14 @@ export default class UI {
     const text = document.createElement("p");
     text.textContent = "Add A New Task";
     row.append(addIcon, text);
+    const preview = document.querySelector(".preview");
+    preview.append(row);
     row.addEventListener("click", () => {
       this.loadAddTaskBtn(row);
     });
-    const preview = document.querySelector(".preview");
-    preview.append(row);
   }
   static loadAddTaskBtn(e) {
+    console.log(e);
     e.classList.add("hidden");
     const row = document.createElement("div");
     row.classList.add("new-task");

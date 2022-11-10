@@ -2,7 +2,7 @@ export default class Task {
   constructor(name, priority = 1, dueDate = "No Date") {
     this.name = name;
     this.priority = priority;
-    this.duedate = dueDate;
+    this.dueDate = dueDate;
   }
   getName() {
     return this.name;
@@ -10,10 +10,10 @@ export default class Task {
   getPriority() {
     return this.priority;
   }
-  setName(name) {
-    this.name = name;
+  setName(newName) {
+    this.name = newName;
   }
   getDueDate() {
-    return this.duedate;
+    return this.dueDate;
   }
 }
