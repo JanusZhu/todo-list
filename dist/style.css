@@ -159,7 +159,7 @@ footer a {
 }
 .task-detail {
   display: grid;
-  grid-template-columns: auto 1fr auto auto;
+  grid-template-columns: auto 1fr auto auto auto auto auto;
   align-items: center;
   gap: 20px;
 }
@@ -191,7 +191,7 @@ footer a {
 }
 .change-name {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 .change-name input {
@@ -213,4 +213,8 @@ footer a {
 }
 .hidden {
   display: none;
+}
+.preview p:first-child {
+  font-size: x-large;
+  font-weight: 600;
 }

@@ -18,8 +18,14 @@ export default class UI {
 
     const headerImg = document.createElement("img");
     headerImg.src = "https://img.icons8.com/arcade/64/000000/todo-list.png";
+    headerImg.addEventListener("click", () => {
+      this.loadContent();
+    });
     const headerTxt = document.createElement("p");
     headerTxt.textContent = "Todoism";
+    headerTxt.addEventListener("click", () => {
+      this, this.loadContent();
+    });
     header.append(headerImg, headerTxt);
     content.append(header);
   }
@@ -136,6 +142,7 @@ export default class UI {
     const btns = Array.from(document.querySelectorAll(".task-dueDate"));
     btns.forEach((btn) => {
       btn.addEventListener("click", () => {
+        this.closeAllInputs();
         btn.classList.add("hidden");
         this.replaceDate(btn);
       });
@@ -154,12 +161,18 @@ export default class UI {
       Storage.changeTaskName(projectName, taskName, newName);
       this.loadProjectDetails(projectName);
     });
+    const cancel = document.querySelector(".cancel");
+    cancel.addEventListener("click", () => {
+      const projectName = document.querySelector(".project-title").textContent;
+      this.loadProjectDetails(projectName);
+    });
   }
 
   static loadNameBtn() {
     const btns = Array.from(document.querySelectorAll(".task-name"));
     btns.forEach((btn) => {
       btn.addEventListener("click", () => {
+        this.closeAllInputs();
         btn.classList.add("hidden");
         this.replaceName(btn);
       });
@@ -216,6 +229,7 @@ export default class UI {
     });
   }
   static loadAddTaskBtn(e) {
+    this.closeAllInputs();
     console.log(e);
     e.classList.add("hidden");
     const row = document.createElement("div");
@@ -247,6 +261,11 @@ export default class UI {
     const projectName = document.querySelector(".project-title").textContent;
     if (input.value === "") {
       alert("Please add a name");
+    } else if (
+      Storage.getTodoList().getProject(projectName).contains(input.value)
+    ) {
+      alert("Please choose a different name");
+      return;
     } else {
       Storage.addTask(projectName, new Task(input.value));
       this.handleCancelTask();
@@ -263,6 +282,7 @@ export default class UI {
   }
 
   static loadProjectBtn(e) {
+    this.closeAllInputs();
     e.classList.add("hidden");
     const row = document.createElement("div");
     row.classList.add("new-project");
@@ -306,6 +326,7 @@ export default class UI {
     Storage.deleteProject(i);
     this.loadContent();
   }
+
   static handleCancel() {
     document.querySelector(".new-project").remove();
     if (document.querySelector(".hidden")) {
@@ -314,10 +335,36 @@ export default class UI {
     }
   }
 
+  static closeAllInputs() {
+    const hiddenElements = Array.from(document.querySelectorAll(".hidden"));
+    console.log(hiddenElements);
+    if (hiddenElements.length !== 0) {
+      hiddenElements.forEach((e) => {
+        e.classList.remove("hidden");
+      });
+    }
+
+    if (document.querySelector(".new-project")) {
+      document.querySelector(".new-project").remove();
+    }
+    if (document.querySelector(".new-task")) {
+      document.querySelector(".new-task").remove();
+    }
+    if (document.querySelector(".change-name")) {
+      document.querySelector(".change-name").remove();
+    }
+    if (document.querySelector(".change-date")) {
+      document.querySelector(".change-date").remove();
+    }
+  }
+
   static loadProjectPreview() {
     const home = document.querySelector(".home");
     const preview = document.createElement("div");
     preview.classList.add("preview");
+    const p = document.createElement("p");
+    p.textContent = "Start by clicking buttons on the left";
+    preview.append(p);
     home.append(preview);
   }
 }
