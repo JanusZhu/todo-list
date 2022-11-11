@@ -34,7 +34,7 @@ export default class UI {
     const footer = document.createElement("footer");
     footer.textContent = "Copyrights© JanusZhu |";
     const link = document.createElement("a");
-    link.href = "#";
+    link.href = "https://github.com/JanusZhu/todo-list";
     link.textContent = "Source Code";
     footer.appendChild(link);
     content.append(footer);
