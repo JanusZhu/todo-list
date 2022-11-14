@@ -1,30 +1,28 @@
-import TodoList from "./TodoList";
-import Project from "./Project";
-import Task from "./Task";
+import TodoList from './TodoList';
+import Project from './Project';
+import Task from './Task';
 
 class Storage {
   static saveTodoList(data) {
-    localStorage.setItem("todoList", JSON.stringify(data));
+    localStorage.setItem('todoList', JSON.stringify(data));
   }
 
   static getTodoList() {
     const todoList = Object.assign(
       new TodoList(),
-      JSON.parse(localStorage.getItem("todoList"))
+      JSON.parse(localStorage.getItem('todoList')),
     );
     todoList.setProjects(
       todoList
         .getProjects()
-        .map((project) => Object.assign(new Project(), project))
+        .map((project) => Object.assign(new Project(), project)),
     );
 
     todoList
       .getProjects()
-      .forEach((project) =>
-        project.setTasks(
-          project.getTasks().map((task) => Object.assign(new Task(), task))
-        )
-      );
+      .forEach((project) => project.setTasks(
+        project.getTasks().map((task) => Object.assign(new Task(), task)),
+      ));
 
     return todoList;
   }
@@ -58,6 +56,7 @@ class Storage {
     todoList.getProject(projectName).getTask(taskName).setName(newTaskName);
     this.saveTodoList(todoList);
   }
+
   static changeTaskDate(projectName, taskName, newTaskDate) {
     const todoList = this.getTodoList();
     todoList.getProject(projectName).getTask(taskName).setDueDate(newTaskDate);

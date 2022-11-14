@@ -3,6 +3,7 @@ export default class Project {
     this.name = name;
     this.tasks = [];
   }
+
   getName() {
     return this.name;
   }

@@ -1,11 +1,13 @@
-import Project from "./Project";
+import Project from './Project';
+
 export default class TodoList {
   constructor() {
     this.projects = [];
-    this.projects.push(new Project("Inbox"));
-    this.projects.push(new Project("Today"));
-    this.projects.push(new Project("This week"));
+    this.projects.push(new Project('Inbox'));
+    this.projects.push(new Project('Today'));
+    this.projects.push(new Project('This week'));
   }
+
   setProjects(projects) {
     this.projects = projects;
   }
@@ -25,16 +27,15 @@ export default class TodoList {
   addProject(newProject) {
     if (
       this.projects.find(
-        (project) => project.getName() === newProject.getName()
+        (project) => project.getName() === newProject.getName(),
       )
-    )
-      return;
+    ) { return; }
     this.projects.push(newProject);
   }
 
   deleteProject(projectName) {
     const deletedProject = this.projects.find(
-      (project) => project.getName() === projectName
+      (project) => project.getName() === projectName,
     );
     this.projects.splice(this.projects.indexOf(deletedProject), 1);
   }
